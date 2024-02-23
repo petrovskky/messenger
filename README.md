@@ -35,7 +35,7 @@
 
 ## Диаграмма классов
 
-<img src="class_diagram.png">
+<img src="class_diagram.jpg">
 
 ## Описание моделей данных
 
