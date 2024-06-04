@@ -1,6 +1,10 @@
+import 'package:messenger/domain/entities/language.dart';
+
 abstract class IPreferenceDataSource {
   bool get isLightTheme;
-  String get language;
+  String get appLanguage;
+  Language get messageLanguage;
   set isLightTheme(bool isLightTheme);
-  set language(String language);
+  set appLanguage(String language);
+  set messageLanguage(Language language);
 }

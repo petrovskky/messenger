@@ -17,6 +17,30 @@ class User {
     this.photoUrl,
   });
 
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      isActive: json['isActive'],
+      phone: json['phone'],
+      birthday: json['birthday'] != null ? DateTime.parse(json['birthday']) : null,
+      photoUrl: json['photoUrl'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'isActive': isActive,
+      'phone': phone,
+      'birthday': birthday?.toIso8601String(),
+      'photoUrl': photoUrl,
+    };
+  }
+
   void edit({
     String? newName,
     String? newPhone,

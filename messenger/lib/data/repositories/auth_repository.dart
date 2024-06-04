@@ -1,34 +1,47 @@
-import 'package:messenger/data/utils/fake_db.dart';
 import 'package:messenger/domain/data_interfaces/i_auth_repository.dart';
-import 'package:messenger/domain/entities/user.dart';
+
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthRepository implements IAuthRepository {
+  final firebase_auth.FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firebaseFirestore;
+
+  static const String _usersPath = 'users';
+
+  AuthRepository({required this.firebaseAuth, required this.firebaseFirestore});
+
   @override
-  Future<String?> signIn(String email, String password) async {
-    await Future.delayed(Duration(milliseconds: 1), () {});
-    return userList.cast<User?>().firstWhere((e) => e?.email == email, orElse: () => null)?.id; // user id
+  Future<firebase_auth.UserCredential?> signIn(
+      {required String email, required String password}) async {
+    final res = (await firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password));
+    return res;
   }
 
   @override
   Future<String> signUp({
-    required name,
+    required String name,
     required String email,
     required String password,
     required String phone,
+    required DateTime? birthday,
+    required String? photoUrl,
   }) async {
-    await Future.delayed(Duration(milliseconds: 1), () {});
-    final user = User(
-      id: userList.length.toString(),
-      name: name,
-      email: email,
-      isActive: true,
-      phone: phone,
-    );
-    return user.id; // user id
+    final authRes = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    final storageRes = (await firebaseFirestore.collection(_usersPath).add({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'birthday': birthday?.toIso8601String(),
+      'photoUrl': photoUrl,
+    }));
+    return storageRes.id;
   }
 
   @override
   Future<void> signOut() async {
-    await Future.delayed(Duration(milliseconds: 1), () {});
+    await firebaseAuth.signOut();
   }
 }

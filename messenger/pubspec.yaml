@@ -1,14 +1,17 @@
 name: messenger
 description: A sample command-line application.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.3.0
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
+  cloud_functions: ^4.7.6
+  firebase_auth: ^4.20.0
+  firebase_core: ^2.32.0
+  cloud_firestore: ^4.17.5
+  firebase_storage: ^11.7.7
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   lints: ^3.0.0
