@@ -12,11 +12,11 @@ class AuthRepository implements IAuthRepository {
   AuthRepository({required this.firebaseAuth, required this.firebaseFirestore});
 
   @override
-  Future<firebase_auth.UserCredential?> signIn(
+  Future<bool> signIn(
       {required String email, required String password}) async {
     final res = (await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password));
-    return res;
+    return res != null;
   }
 
   @override
@@ -44,4 +44,7 @@ class AuthRepository implements IAuthRepository {
   Future<void> signOut() async {
     await firebaseAuth.signOut();
   }
+  
+  @override
+  bool get isAuthorized => firebaseAuth.currentUser != null;
 }

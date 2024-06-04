@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 abstract class IAuthRepository {
-  Future<UserCredential?> signIn({
+  bool get isAuthorized => false;
+
+  Future<bool> signIn({
     required String email,
     required String password,
   });

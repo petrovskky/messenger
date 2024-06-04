@@ -12,6 +12,8 @@ dependencies:
   cloud_firestore: ^4.17.5
   firebase_storage: ^11.7.7
   shared_preferences: ^2.2.3
+  get_it: ^7.7.0
+  http: ^1.2.1
 
 dev_dependencies:
   lints: ^3.0.0

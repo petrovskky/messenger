@@ -9,7 +9,7 @@ import 'package:messenger/domain/entities/dialog.dart';
 import 'package:messenger/domain/entities/user.dart';
 
 void main() async {
-  while (true) {
+  /*while (true) {
     String userId;
     while (true) {
       print("========= Sign in =========");
@@ -72,5 +72,5 @@ void main() async {
     }
     }
     
-  }
+  }*/
 }
