@@ -127,6 +127,34 @@ class ChatRepository implements IChatRepository {
   }
 
   @override
+  Future<String?> getDialogByUser(String userId) async {
+    try {
+      final dialogSnapshot = await firebaseFirestore
+          .collection('dialogs')
+          .where('participants', arrayContains: userId)
+          .get();
+      if (dialogSnapshot.docs.isNotEmpty) {
+        final email = getIt.get<IAuthRepository>().userEmail;
+        final querySnapshot = await firebaseFirestore
+            .collection('users')
+            .where('email', isEqualTo: email)
+            .get();
+        final mineId = querySnapshot.docs.first.id;
+
+        final dialogs = dialogSnapshot.docs
+            .where((doc) => doc.data()['participants'].contains(mineId));
+        if (dialogs.isNotEmpty) {
+          final dialogId = dialogs.first.id;
+          return dialogId;
+        }
+      }
+    } catch (e) {
+      print('Error getting dialog by user: $e');
+    }
+    return null;
+  }
+
+  @override
   Future<Dialog> addBot(String botId) async {
     return Dialog(id: '0', participants: [], botId: botId, messages: []);
     /*final user = await getUserById(id: _id);

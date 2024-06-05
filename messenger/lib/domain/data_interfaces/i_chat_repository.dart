@@ -12,4 +12,5 @@ abstract class IChatRepository {
   Future<Dialog> addBot(String botId);
   Future<void> sendMessage(String dialogId, String message);
   Future<void> openDialog(String dialogId, Function(Dialog) onChange);
+  Future<String?> getDialogByUser(String userId);
 }

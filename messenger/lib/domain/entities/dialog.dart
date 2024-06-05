@@ -20,10 +20,10 @@ class Dialog {
 
   factory Dialog.fromJson(Map<String, dynamic> json, String id) {
     return Dialog(
-      id: id,
+      id: id ?? '',
       participants: List<String>.from(json['participants']),
       lastMessage: json['lastMessage'],
-      unreadCount: json['unreadCount'],
+      unreadCount: json['unreadCount'] ?? 0,
       botId: json['botId'],
       messages: List<Message>.from(
           json['messages'].map((messageJson) => Message.fromJson(messageJson))),
