@@ -1,17 +1,17 @@
 class Message {
-  bool isMine;
+  String senderId;
   String text;
   DateTime dateTime;
 
   Message({
-    required this.isMine,
+    required this.senderId,
     required this.text,
     required this.dateTime,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      isMine: json['isMine'],
+      senderId: json['senderId'],
       text: json['text'],
       dateTime: DateTime.parse(json['dateTime']),
     );
@@ -19,7 +19,7 @@ class Message {
 
   Map<String, dynamic> toJson() {
     return {
-      'isMine': isMine,
+      'senderId': senderId,
       'text': text,
       'dateTime': dateTime.toIso8601String(),
     };

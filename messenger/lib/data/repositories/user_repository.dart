@@ -107,7 +107,7 @@ class UserRepository implements IUserRepository {
   @override
   Future<String?> loadAvatar(File file) async {
     try {
-      final storageRef = FirebaseStorage.instance.ref().child(
+      final storageRef = firebaseStorage.ref().child(
           'avatars/${userId}${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}_avatar.jpg');
       final uploadTask = storageRef.putFile(file);
       final snapshot = await uploadTask.whenComplete(() {});

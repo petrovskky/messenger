@@ -68,10 +68,16 @@ class ChatRepository implements IChatRepository {
   @override
   Future<void> sendMessage(String dialogId, String message) async {
     try {
+      final email = getIt.get<IAuthRepository>().userEmail;
+      final querySnapshot = await firebaseFirestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      final mineId = querySnapshot.docs.first.id;
       await firebaseFirestore.collection('dialogs').doc(dialogId).update({
         'messages': FieldValue.arrayUnion([
           Message(
-            isMine: true,
+            senderId: mineId,
             text: message,
             dateTime: DateTime.now(),
           ).toJson(),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 abstract class IAuthRepository {
   bool get isAuthorized => false;
   String? userId;
@@ -14,7 +16,7 @@ abstract class IAuthRepository {
     required String password,
     required String phone,
     required DateTime? birthday,
-    required String? photoUrl,
+    required File? photo,
   });
 
   Future<void> signOut();
