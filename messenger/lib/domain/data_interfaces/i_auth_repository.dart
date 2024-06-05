@@ -1,5 +1,7 @@
 abstract class IAuthRepository {
   bool get isAuthorized => false;
+  String? userId;
+  String? get userEmail;
 
   Future<bool> signIn({
     required String email,

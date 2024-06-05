@@ -6,7 +6,7 @@ abstract class IChatRepository {
   Future<List<User>> getUserListByName({String? name});
   Future<User?> getUserByPhone({String? phone});
   Future<User?> getUserById({String? id});
-  Future<Dialog?> createDialog(String userId);
+  Future<String?> createDialog(String userId);
   Future<void> deleteDialog(String id);
   Future<List<Dialog>> getDialogs();
   Future<Dialog> addBot(String botId);

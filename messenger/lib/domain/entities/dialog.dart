@@ -7,6 +7,7 @@ class Dialog {
   String? lastMessage;
   int unreadCount;
   final String? botId;
+  final List<Message> messages;
 
   Dialog({
     required this.id,
@@ -14,15 +15,17 @@ class Dialog {
     this.lastMessage,
     this.unreadCount = 0,
     this.botId,
+    required this.messages,
   });
 
-  factory Dialog.fromJson(Map<String, dynamic> json) {
+  factory Dialog.fromJson(Map<String, dynamic> json, String id) {
     return Dialog(
-      id: json['id'],
+      id: id,
       participants: List<String>.from(json['participants']),
       lastMessage: json['lastMessage'],
       unreadCount: json['unreadCount'],
       botId: json['botId'],
+      messages: List<Message>.from(json['messages'].map((messageJson) => Message.fromJson(messageJson))),
     );
   }
 
@@ -33,6 +36,7 @@ class Dialog {
       'lastMessage': lastMessage,
       'unreadCount': unreadCount,
       'botId': botId,
+      'messages': messages.map((message) => message.toJson()).toList(),
     };
   }
 }

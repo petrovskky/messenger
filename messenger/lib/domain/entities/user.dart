@@ -1,5 +1,5 @@
 class User {
-  String id;
+  String? id;
   String name;
   String email;
   bool isActive;
@@ -8,7 +8,7 @@ class User {
   String? photoUrl;
 
   User({
-    required this.id,
+    this.id,
     required this.name,
     required this.email,
     required this.isActive,
@@ -17,12 +17,12 @@ class User {
     this.photoUrl,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> json, String? id) {
     return User(
       id: json['id'],
       name: json['name'],
       email: json['email'],
-      isActive: json['isActive'],
+      isActive: json['isActive'] ?? false,
       phone: json['phone'],
       birthday: json['birthday'] != null ? DateTime.parse(json['birthday']) : null,
       photoUrl: json['photoUrl'],

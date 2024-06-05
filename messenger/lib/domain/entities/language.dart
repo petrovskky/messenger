@@ -1,3 +1,5 @@
+import 'package:messenger/data/utils/translator.dart';
+
 enum Language {
   Arabic,
   Armenian,
@@ -36,4 +38,8 @@ enum Language {
   Thai,
   Turkish,
   Ukrainian
+}
+
+extension on Language {
+  String get code => Translator.supportedLanguages.entries.firstWhere((e) => e.key == name).value;
 }
