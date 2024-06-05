@@ -10,4 +10,6 @@ abstract class IChatRepository {
   Future<void> deleteDialog(String id);
   Future<List<Dialog>> getDialogs();
   Future<Dialog> addBot(String botId);
+  Future<void> sendMessage(String dialogId, String message);
+  Future<void> openDialog(String dialogId, Function(Dialog) onChange);
 }

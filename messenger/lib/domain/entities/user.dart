@@ -1,5 +1,5 @@
 class User {
-  String? id;
+  String id;
   String name;
   String email;
   bool isActive;
@@ -8,7 +8,7 @@ class User {
   String? photoUrl;
 
   User({
-    this.id,
+    required this.id,
     required this.name,
     required this.email,
     required this.isActive,
@@ -19,7 +19,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json, String? id) {
     return User(
-      id: json['id'],
+      id: id ?? '',
       name: json['name'],
       email: json['email'],
       isActive: json['isActive'] ?? false,

@@ -1,4 +1,33 @@
 class Message {
+  bool isMine;
+  String text;
+  DateTime dateTime;
+
+  Message({
+    required this.isMine,
+    required this.text,
+    required this.dateTime,
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      isMine: json['isMine'],
+      text: json['text'],
+      dateTime: DateTime.parse(json['dateTime']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'isMine': isMine,
+      'text': text,
+      'dateTime': dateTime.toIso8601String(),
+    };
+  }
+}
+
+
+class MessageCustom {
   final String id;
   final String dialogId;
   final String senderId;
@@ -11,7 +40,7 @@ class Message {
   bool isRead;
   String language;
 
-  Message({
+  MessageCustom({
     required this.id,
     required this.dialogId,
     required this.senderId,
@@ -25,8 +54,8 @@ class Message {
     this.language = '',
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
+  factory MessageCustom.fromJson(Map<String, dynamic> json) {
+    return MessageCustom(
       id: json['id'],
       dialogId: json['dialogId'],
       senderId: json['senderId'],

@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:messenger/domain/data_interfaces/i_auth_repository.dart';
 import 'package:messenger/domain/data_interfaces/i_chat_repository.dart';
 import 'package:messenger/domain/data_interfaces/i_user_repository.dart';
 import 'package:messenger/domain/entities/dialog.dart';
+import 'package:messenger/domain/entities/message.dart';
 import 'package:messenger/domain/entities/user.dart';
 import 'package:messenger/presentation/di/injector.dart';
 
@@ -12,6 +15,8 @@ class ChatRepository implements IChatRepository {
 
   ChatRepository(
       {required this.userRepository, required this.firebaseFirestore});
+
+  StreamSubscription? _dialogSubscription;
 
   @override
   Future<List<User>> getUserList() async {
@@ -43,7 +48,10 @@ class ChatRepository implements IChatRepository {
   Future<String?> createDialog(String userId) async {
     try {
       final email = getIt.get<IAuthRepository>().userEmail;
-      final querySnapshot = await firebaseFirestore.collection('users').where('email', isEqualTo: email).get();
+      final querySnapshot = await firebaseFirestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
       final mineId = querySnapshot.docs.first.id;
 
       final dialogRef = await firebaseFirestore.collection('dialogs').add({
@@ -60,15 +68,13 @@ class ChatRepository implements IChatRepository {
   @override
   Future<void> sendMessage(String dialogId, String message) async {
     try {
-      final email = getIt.get<IAuthRepository>().userEmail;
-      final querySnapshot = await firebaseFirestore.collection('users').where('email', isEqualTo: email).get();
-      final senderId = querySnapshot.docs.first.id;
       await firebaseFirestore.collection('dialogs').doc(dialogId).update({
         'messages': FieldValue.arrayUnion([
-          {
-            'senderId': senderId,
-            'message': message,
-          },
+          Message(
+            isMine: true,
+            text: message,
+            dateTime: DateTime.now(),
+          ).toJson(),
         ]),
       });
     } catch (e) {
@@ -83,16 +89,40 @@ class ChatRepository implements IChatRepository {
   Future<List<Dialog>> getDialogs() async {
     try {
       final email = getIt.get<IAuthRepository>().userEmail;
-      final querySnapshot = await firebaseFirestore.collection('users').where('email', isEqualTo: email).get();
+      final querySnapshot = await firebaseFirestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
       final userId = querySnapshot.docs.first.id;
 
-      final dialogSnapshot = await firebaseFirestore.collection('dialogs').where('participants', arrayContains: userId).get();
-      final dialogList = dialogSnapshot.docs.map((doc) => Dialog.fromJson(doc.data(), doc.id)).toList();
+      final dialogSnapshot = await firebaseFirestore
+          .collection('dialogs')
+          .where('participants', arrayContains: userId)
+          .get();
+      final dialogList = dialogSnapshot.docs
+          .map((doc) => Dialog.fromJson(doc.data(), doc.id))
+          .toList();
 
       return dialogList;
     } catch (e) {
       print('Error getting dialogs: $e');
       return [];
+    }
+  }
+
+  @override
+  Future<void> openDialog(String dialogId, Function(Dialog) onChange) async {
+    try {
+      _dialogSubscription?.cancel();
+      final dialogRef = firebaseFirestore.collection('dialogs').doc(dialogId);
+      _dialogSubscription = dialogRef.snapshots().listen((snapshot) {
+        if (snapshot.data() != null) {
+          final dialog = Dialog.fromJson(snapshot.data()!, snapshot.id);
+          onChange(dialog);
+        }
+      });
+    } catch (e) {
+      print('Error opening dialog: $e');
     }
   }
 

@@ -25,7 +25,8 @@ class Dialog {
       lastMessage: json['lastMessage'],
       unreadCount: json['unreadCount'],
       botId: json['botId'],
-      messages: List<Message>.from(json['messages'].map((messageJson) => Message.fromJson(messageJson))),
+      messages: List<Message>.from(
+          json['messages'].map((messageJson) => Message.fromJson(messageJson))),
     );
   }
 
